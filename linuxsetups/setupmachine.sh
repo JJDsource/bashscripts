@@ -100,6 +100,8 @@ chmod 700 $ssh_dir
 echo $public_key >> $ssh_dir/authorized_keys
 chown $username:$username $ssh_dir/authorized_keys
 chmod 600 $ssh_dir/authorized_keys
+# Dont type bash in ssh
+echo "exec bash" >> $home_dir/.profile
 # Update and upgrade packages install sudo
 apt-get update
 apt-get upgrade -y
