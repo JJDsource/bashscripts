@@ -54,7 +54,18 @@ chown $username:$username $ssh_dir
 chmod 700 $ssh_dir
 
 # Prompt for public key
-read -p "Enter the public key for SSH access: " public_key
+echo "Enter the public key for SSH access:"
+read -r public_key
+
+# Prompt to confirm public key
+echo "Confirm the public key for SSH access:"
+read -r confirm_public_key
+
+# Check if public keys match
+if [[ "$public_key" != "$confirm_public_key" ]]; then
+  echo "Public keys do not match. Please try again."
+  exit 1
+fi
 
 # Add public key to authorized_keys file
 echo $public_key >> $ssh_dir/authorized_keys
