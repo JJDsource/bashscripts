@@ -8,7 +8,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Change hostname?
-read -p "Do you want to change the hostname? (y/n): " change_hostname
+read -p "Do you want to change the hostname? No for proxmox LXC (y/n): " change_hostname
 
 # INPUTS
 # HOSTNAME
