@@ -100,4 +100,4 @@ echo "SSH access with the provided public key has been configured."
 # Logout of root account after 10 seconds
 echo "Logging out of the root account in 10 seconds..."
 sleep 10
-exit
+logout
