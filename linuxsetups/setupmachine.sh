@@ -27,10 +27,19 @@ apt-get install -y sudo
 # Add user
 useradd -m $username
 
-# Set password for the new user
+# Prompt for password
 echo "Enter password for user $username:"
 read -s password
-echo "$username:$password" | chpasswd
+
+# Prompt to confirm password
+echo "Confirm password for user $username:"
+read -s confirm_password
+
+# Check if passwords match
+if [[ "$password" != "$confirm_password" ]]; then
+  echo "Passwords do not match. Please try again."
+  exit 1
+fi
 
 # Add user to sudoers group
 usermod -aG sudo $username
