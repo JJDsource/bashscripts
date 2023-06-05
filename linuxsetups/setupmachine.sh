@@ -42,7 +42,7 @@ fi
 # Prompt to confirm username
 read -p "Confirm username: " confirm_username
 
-# Check if hostnames match
+# Check if username match
 if [[ "$username" != "$confirm_username" ]]; then
   echo "Username do not match. Please try again."
   exit 1
@@ -105,8 +105,3 @@ chmod 600 $ssh_dir/authorized_keys
 
 echo "User $username has been created and added to the sudoers group."
 echo "SSH access with the provided public key has been configured."
-
-# Logout of root account after 10 seconds
-echo "Logging out of the root account in 10 seconds..."
-sleep 10
-logout
