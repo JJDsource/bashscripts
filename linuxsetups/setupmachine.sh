@@ -85,6 +85,8 @@ hostnamectl set-hostname "$hostname"
 useradd -m $username
 # Add user to sudoers group
 usermod -aG sudo $username
+# Remove password prompt for sudo
+echo "$username ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 # Set password for the new user
 echo "$username:$password" | chpasswd
 # Set up SSH with public key
