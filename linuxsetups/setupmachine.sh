@@ -39,6 +39,15 @@ if [[ -z $username ]]; then
   exit 1
 fi
 
+# Prompt to confirm username
+read -p "Confirm username: " confirm_username
+
+# Check if hostnames match
+if [[ "$username" != "$confirm_username" ]]; then
+  echo "Username do not match. Please try again."
+  exit 1
+fi
+
 # Update and upgrade packages
 apt-get update
 apt-get upgrade -y
