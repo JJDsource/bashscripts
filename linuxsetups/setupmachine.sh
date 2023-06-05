@@ -1,12 +1,34 @@
 #!/bin/bash
 
-#Run before executing chmod +x setup.sh
+#Run before executing chmod +x setupmachine.sh
 
 # Check if running as root
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root."
   exit 1
 fi
+
+# Prompt for hostname
+read -p "Enter hostname: " hostname
+
+# Check if hostname is provided
+if [[ -z $hostname ]]; then
+  echo "Hostname is missing."
+  exit 1
+fi
+
+# Prompt to confirm hostname
+read -p "Confirm hostname: " confirm_hostname
+
+# Check if hostnames match
+if [[ "$hostname" != "$confirm_hostname" ]]; then
+  echo "Hostnames do not match. Please try again."
+  exit 1
+fi
+
+# Set hostname
+echo "$hostname" > /etc/hostname
+hostnamectl set-hostname "$hostname"
 
 # Prompt for username
 read -p "Enter username: " username
