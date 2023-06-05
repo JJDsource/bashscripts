@@ -26,9 +26,13 @@ if [[ "$hostname" != "$confirm_hostname" ]]; then
   exit 1
 fi
 
+# Get the current IP address
+current_ip=$(hostname -I | awk '{print $1}')
+
 # Set hostname
 echo "$hostname" > /etc/hostname
 echo "127.0.0.1 $hostname" >> /etc/hosts
+echo "$current_ip $hostname" >> /etc/hosts
 hostnamectl set-hostname "$hostname"
 
 # Prompt for username
