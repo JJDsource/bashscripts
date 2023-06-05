@@ -28,6 +28,7 @@ fi
 
 # Set hostname
 echo "$hostname" > /etc/hostname
+echo "127.0.0.1 $hostname" >> /etc/hosts
 hostnamectl set-hostname "$hostname"
 
 # Prompt for username
