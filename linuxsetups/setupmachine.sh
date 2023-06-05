@@ -7,23 +7,27 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+# Change hostname?
+read -p "Do you want to change the hostname? (y/n): " change_hostname
+
 # INPUTS
 # HOSTNAME
-# Prompt for hostname
-read -p "Enter hostname: " hostname
-# Check if hostname is provided
-if [[ -z $hostname ]]; then
-  echo "Hostname is missing."
-  exit 1
+# Prompt for hostname if change_hostname is y
+if [[ $change_hostname == "y" ]]; then
+  read -p "Enter hostname: " hostname
+  # Check if hostname is provided
+  if [[ -z $hostname ]]; then
+    echo "Hostname is missing."
+    exit 1
+  fi
+  # Prompt to confirm hostname
+  read -p "Confirm hostname: " confirm_hostname
+  # Check if hostnames match
+  if [[ "$hostname" != "$confirm_hostname" ]]; then
+    echo "Hostnames do not match. Please try again."
+    exit 1
+  fi
 fi
-# Prompt to confirm hostname
-read -p "Confirm hostname: " confirm_hostname
-# Check if hostnames match
-if [[ "$hostname" != "$confirm_hostname" ]]; then
-  echo "Hostnames do not match. Please try again."
-  exit 1
-fi
-
 # USERNAME
 # Prompt for username
 read -p "Enter username: " username
@@ -39,7 +43,6 @@ if [[ "$username" != "$confirm_username" ]]; then
   echo "Username do not match. Please try again."
   exit 1
 fi
-
 # PASSWORD
 # Prompt for password
 echo "Enter password for user $username:"
@@ -76,11 +79,13 @@ fi
 current_ip=$(hostname -I | awk '{print $1}')
 
 # ACTIONS
-# Set hostname
-echo "$hostname" > /etc/hostname
-echo "127.0.0.1 $hostname" >> /etc/hosts
-echo "$current_ip $hostname" >> /etc/hosts
-hostnamectl set-hostname "$hostname"
+# set hostname if change_hostname is y
+if [[ $change_hostname == "y" ]]; then
+    echo "$hostname" > /etc/hostname
+    echo "127.0.0.1 $hostname" >> /etc/hosts
+    echo "$current_ip $hostname" >> /etc/hosts
+    hostnamectl set-hostname "$hostname"
+fi
 # Add user
 useradd -m $username
 # Add user to sudoers group
@@ -108,7 +113,9 @@ apt-get install -y sudo
 echo "$username ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # EXIT NOTES
-echo "hostanme has been set to $hostname."
+if [[ $change_hostname == "y" ]]; then
+    echo "hostanme has been set to $hostname."
+fi
 echo "User $username has been created and added to the sudoers group."
 echo "SSH access with the provided public key has been configured."
 
